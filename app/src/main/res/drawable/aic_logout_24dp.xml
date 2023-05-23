@@ -1,0 +1,8 @@
+<!--<bitmap xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:src="@drawable/ic_logout_24dp"-->
+<!--    android:tint="?attr/colorOnSurfaceVariant"/>-->
+<ImageView android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:tint="?attr/colorOnSurfaceVariant"
+    android:src="@drawable/ic_logout_24dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

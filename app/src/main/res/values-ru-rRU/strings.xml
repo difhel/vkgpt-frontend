@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VK-GPT</string>
+    <string name="action_settings">Настройки</string>
+    <string name="first_fragment_label">Первый фрагмент</string>
+    <string name="second_fragment_label">Второй фргамент</string>
+    <string name="next">Вперед</string>
+    <string name="previous">Назад</string>
+    <string name="hello_first_fragment">тест</string>
+    <string name="hello_second_fragment">тест2</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти через VK ID</string>
+    <string name="action_sign_in_short">Войти</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="invalid_username">Неправильный ник</string>
+    <string name="invalid_password">Пароль должен быть >5 символов</string>
+    <string name="login_failed">Ошибка: (%1$s) %2$s</string>
+    <string name="login_vk_text">Вход через VK</string>
+    <string name="prompt_login">Номер телефона или Email</string>
+    <string name="action_sign_up">Еще нет аккаунта? <u>Регистрация</u></string>
+    <string name="http_error">Что-то пошло не так, проверьте подключение к интернету</string>
+    <string name="title_activity_chats_list">Чаты</string>
+    <string name="logout">Выйти</string>
+    <string name="welcome_back">Привет, %1$s!</string>
+    <string name="restart">Перезапустить приложение</string>
+    <string name="error">Упс, ошибка</string>
+    <string name="photo">Фото</string>
+    <string name="sticker">Стикер</string>
+    <string name="doc">Файл</string>
+    <string name="docs">Вложения</string>
+    <string name="title_activity_view_chat">Чат</string>
+    <string name="message">Сообщение</string>
+</resources>
