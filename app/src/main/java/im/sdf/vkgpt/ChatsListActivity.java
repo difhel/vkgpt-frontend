@@ -70,8 +70,9 @@ public class ChatsListActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int userId = sharedPreferences.getInt("user_id", -1);
         String accessToken = sharedPreferences.getString("access_token", "");
+        VKUtils vkUtils = new VKUtils();
         // avatar of the app user
-        setAvatarToToolbar(userId, accessToken, editor);
+        setAvatarToToolbar(userId, accessToken, vkUtils);
         // VK Utils class for getting names of users in conversations list
         // #лучшееапивинтернете
         //   DELETED     VKUtils mVKUtils = new VKUtils(accessToken);
@@ -109,19 +110,7 @@ public class ChatsListActivity extends AppCompatActivity {
                     // VK rejected the request or the response scheme is incorrect
                     Log.d("ChatsListActivity", "Rejected");
                     if (conversations.error != null) {
-                        if (conversations.error.errorCode == 5) {
-                            // User auth is broken - https://dev.vk.com/reference/errors
-                            editor.clear();
-                            editor.apply();
-                            finishAffinity();
-                            Log.d("ChatListActivity", "Broken user: " + conversations.getErrorMessage());
-                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Toast.makeText(ChatsListActivity.this, R.string.error, Toast.LENGTH_LONG).show();
-                            Log.e("ChatListActivity", "API Error: " + conversations.getErrorMessage());
-                        }
+                        vkUtils.resolveVKAPIError(conversations.error, conversations.getErrorMessage(), getApplicationContext(), "ChatListActivity");
                     }
                 }
             }
@@ -134,7 +123,7 @@ public class ChatsListActivity extends AppCompatActivity {
             }
         });
     }
-    private void setAvatarToToolbar(int userId, String accessToken, SharedPreferences.Editor editor) {
+    private void setAvatarToToolbar(int userId, String accessToken, VKUtils vkUtils) {
         VKAPI VKAPIClient = RetrofitClient
                 .getInstance()
                 .getVKAPI();
@@ -175,19 +164,7 @@ public class ChatsListActivity extends AppCompatActivity {
                 else if (!response.isSuccessful() || !users.isSuccessful()){
                     // VK rejected the request or the response scheme is incorrect
                     if (users.error != null) {
-                        if (users.error.errorCode == 5) {
-                            // User auth is broken - https://dev.vk.com/reference/errors
-                            editor.clear();
-                            editor.apply();
-                            finishAffinity();
-                            Log.d("ChatListActivity", "Broken user: " + users.getErrorMessage());
-                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Toast.makeText(ChatsListActivity.this, R.string.error, Toast.LENGTH_LONG).show();
-                            Log.e("ChatListActivity", "API Error: " + users.getErrorMessage());
-                        }
+                        vkUtils.resolveVKAPIError(users.error, users.getErrorMessage(), getApplicationContext(), "ChatsListActivity");
                     }
                 }
             }

@@ -30,6 +30,7 @@ import im.sdf.vkgpt.helpers.CircleTransform;
 import im.sdf.vkgpt.helpers.GPTAPI;
 import im.sdf.vkgpt.helpers.RetrofitClient;
 import im.sdf.vkgpt.helpers.VKAPI;
+import im.sdf.vkgpt.helpers.VKUtils;
 import im.sdf.vkgpt.models.ChatsListAdapter;
 import im.sdf.vkgpt.models.Conversations;
 import im.sdf.vkgpt.models.Messages;
@@ -63,6 +64,8 @@ public class ViewChat extends AppCompatActivity {
         toolbar.setTitle(chatName);
         setChatAvatarToToolbar(photo50, toolbar);
 
+        VKUtils vkUtils = new VKUtils();
+
         List<String> suggestionsList = new ArrayList<>();
         RecyclerView recyclerViewSuggestions = findViewById(R.id.recycler_view_suggestions);
         recyclerViewSuggestions.setLayoutManager(new LinearLayoutManager(this));
@@ -70,71 +73,30 @@ public class ViewChat extends AppCompatActivity {
         recyclerViewSuggestions.setAdapter(suggestionsAdapter);
 
 
-        // getting messages & udpating it
+        // getting messages & updating it
         SharedPreferences sharedPreferences = getSharedPreferences("VKGPT", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int userId = sharedPreferences.getInt("user_id", -1);
         String accessToken = sharedPreferences.getString("access_token", "");
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_messages);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerViewMessages = findViewById(R.id.recycler_view_messages);
+        recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
 
         List<Messages.Message> messageList = new ArrayList<>();
         MessagesListAdapter messagesAdapter = new MessagesListAdapter(messageList);
-        recyclerView.setAdapter(messagesAdapter);
+        recyclerViewMessages.setAdapter(messagesAdapter);
         VKAPI VKAPIClient = RetrofitClient
                 .getInstance()
                 .getVKAPI();
-        Call<Messages> callGetMessages = VKAPIClient.executeGetMessages(
-                VKSCRIPT_GET_MESSAGES,
-                0,
-                1,
-                Integer.parseInt(peerId),
+        handleMessages(
+                recyclerViewMessages,
+                VKAPIClient,
+                peerId,
                 accessToken,
-                "5.131"
+                suggestionsAdapter,
+                messagesAdapter,
+                vkUtils
         );
-        callGetMessages.enqueue(new Callback<Messages>() {
-            @Override
-            public void onResponse(Call<Messages> call, Response<Messages> response) {
-                Messages messages = response.body();
-                Log.d("ChatsListActivity", "Get conv response handled");
-                if (response.isSuccessful() && messages.isSuccessful()) {
-                    // all things are ok
-                    Log.d("ViewChatActivity", "Successfuly got messages");
-                    List<Messages.Message> messageList = messages.response;
-                    handleSuggestions(getShortenMessages(messageList), suggestionsAdapter);
-                    Collections.reverse(messageList);
-                    messagesAdapter.setChatList(messageList);
-                    recyclerView.scrollToPosition(messageList.size() - 1); // we want to show the last message
-                }
-                else if (!response.isSuccessful() || !messages.isSuccessful()){
-                    // VK rejected the request or the response scheme is incorrect
-                    Log.d("ChatsListActivity", "Rejected");
-                    if (messages.error != null) {
-                        if (messages.error.errorCode == 5) {
-                            // User auth is broken - https://dev.vk.com/reference/errors
-                            editor.clear();
-                            editor.apply();
-                            finishAffinity();
-                            Log.d("ChatListActivity", "Broken user: " + messages.getErrorMessage());
-                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Toast.makeText(ViewChat.this, R.string.error, Toast.LENGTH_LONG).show();
-                            Log.e("ChatListActivity", "API Error: " + messages.getErrorMessage());
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Messages> call, Throwable t) {
-                Log.d("ViewChat", "Failure", t);
-
-                Toast.makeText(ViewChat.this, R.string.http_error, Toast.LENGTH_LONG).show();
-            }
-        });
     }
     private void setChatAvatarToToolbar(String photo50, MaterialToolbar toolbar) {
         Target target = new Target() {
@@ -157,6 +119,54 @@ public class ViewChat extends AppCompatActivity {
         };
 
         Picasso.get().load(photo50).resizeDimen(R.dimen.topbar_avatar_size, R.dimen.topbar_avatar_size).transform(new CircleTransform()).into(target);
+    }
+    private void handleMessages(
+            RecyclerView recyclerViewMessages,
+            VKAPI VKAPIClient,
+            String peerId,
+            String accessToken,
+            SuggestionsAdapter suggestionsAdapter,
+            MessagesListAdapter messagesAdapter,
+            VKUtils vkUtils
+    ) {
+        Call<Messages> callGetMessages = VKAPIClient.executeGetMessages(
+                VKSCRIPT_GET_MESSAGES,
+                0,
+                1,
+                Integer.parseInt(peerId),
+                accessToken,
+                "5.131"
+        );
+        callGetMessages.enqueue(new Callback<Messages>() {
+            @Override
+            public void onResponse(Call<Messages> call, Response<Messages> response) {
+                Messages messages = response.body();
+                Log.d("ViewChat", "Get conv response handled");
+                if (response.isSuccessful() && messages.isSuccessful()) {
+                    // all things are ok
+                    Log.d("ViewChat", "Successfuly got messages");
+                    List<Messages.Message> messageList = messages.response;
+                    handleSuggestions(getShortenMessages(messageList), suggestionsAdapter);
+                    Collections.reverse(messageList);
+                    messagesAdapter.setChatList(messageList);
+                    recyclerViewMessages.scrollToPosition(messageList.size() - 1); // we want to show the last message
+                }
+                else if (!response.isSuccessful() || !messages.isSuccessful()){
+                    // VK rejected the request or the response scheme is incorrect
+                    Log.d("ViewChat", "Rejected callGetMessages");
+                    if (messages.error != null) {
+                        vkUtils.resolveVKAPIError(messages.error, messages.getErrorMessage(), getApplicationContext(), "ViewChat");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Messages> call, Throwable t) {
+                Log.d("ViewChat", "Failure", t);
+
+                Toast.makeText(ViewChat.this, R.string.http_error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
     private void handleSuggestions(List<ShortenMessage> shortenMessages, SuggestionsAdapter suggestionsAdapter) {
         GPTAPI GPTAPIClient = RetrofitClient
@@ -200,7 +210,6 @@ public class ViewChat extends AppCompatActivity {
             }
         });
     }
-
     private List<ShortenMessage> getShortenMessages(List<Messages.Message> messages) {
         List<ShortenMessage> result = new ArrayList<>();
         List<String> tmp = new ArrayList<>();
