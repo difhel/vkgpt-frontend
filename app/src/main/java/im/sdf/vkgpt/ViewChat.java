@@ -64,7 +64,7 @@ public class ViewChat extends AppCompatActivity {
         setChatAvatarToToolbar(photo50, toolbar);
 
         List<String> suggestionsList = new ArrayList<>();
-        RecyclerView recyclerViewSuggestions = findViewById(R.id.recycler_view_messages);
+        RecyclerView recyclerViewSuggestions = findViewById(R.id.recycler_view_suggestions);
         recyclerViewSuggestions.setLayoutManager(new LinearLayoutManager(this));
         SuggestionsAdapter suggestionsAdapter = new SuggestionsAdapter(suggestionsList);
         recyclerViewSuggestions.setAdapter(suggestionsAdapter);
@@ -203,11 +203,14 @@ public class ViewChat extends AppCompatActivity {
 
     private List<ShortenMessage> getShortenMessages(List<Messages.Message> messages) {
         List<ShortenMessage> result = new ArrayList<>();
+        List<String> tmp = new ArrayList<>();
         Messages.Message msg;
         for (int i = 0; i < 3 && i < messages.size(); i++) {
             msg = messages.get(i);
             result.add(new ShortenMessage(msg.fromName, msg.text));
+            tmp.add(msg.text);
         }
+        Log.wtf("MessageShortener", tmp.toString());
         return result;
     }
 }

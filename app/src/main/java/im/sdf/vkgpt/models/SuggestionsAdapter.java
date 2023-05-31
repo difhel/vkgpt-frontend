@@ -46,7 +46,7 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsHolder> 
     @Override
     public void onBindViewHolder(@NonNull SuggestionsHolder holder, int position) {
         String suggestion = suggestionsList.get(position);
-        holder.button.setText("Test replace with suggestion");
+        holder.button.setText(suggestion);
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -8,17 +8,11 @@
     >
 
     <Button
-        android:id="@+id/suggestion_button1"
+        android:id="@+id/suggestion_button"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="#лучшееапивинтернете"/>
-
-    <TextView
-        android:id="@+id/suggestion_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"/>
 
 
 
