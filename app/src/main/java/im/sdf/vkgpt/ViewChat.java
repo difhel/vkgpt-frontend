@@ -102,10 +102,10 @@ public class ViewChat extends AppCompatActivity {
                     // all things are ok
                     Log.d("ViewChatActivity", "Successfuly got messages");
                     List<Messages.Message> messageList = messages.response;
+                    handleSuggestions(getShortenMessages(messageList), suggestionsAdapter);
                     Collections.reverse(messageList);
                     messagesAdapter.setChatList(messageList);
                     recyclerView.scrollToPosition(messageList.size() - 1); // we want to show the last message
-                    handleSuggestions(getShortenMessages(messageList), suggestionsAdapter);
                 }
                 else if (!response.isSuccessful() || !messages.isSuccessful()){
                     // VK rejected the request or the response scheme is incorrect
