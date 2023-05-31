@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -20,12 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-import android.widget.Toolbar;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,37 +48,33 @@ public class ChatsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityChatsListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
+        // toolbar setting up
         View logoutBtn = findViewById(R.id.logout_btn);
-        logoutBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences = getSharedPreferences("VKGPT", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
-                finishAffinity();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
+        logoutBtn.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("VKGPT", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+            finishAffinity();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         });
         SharedPreferences sharedPreferences = getSharedPreferences("VKGPT", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         int userId = sharedPreferences.getInt("user_id", -1);
         String accessToken = sharedPreferences.getString("access_token", "");
         VKUtils vkUtils = new VKUtils();
-        // avatar of the app user
         setAvatarToToolbar(userId, accessToken, vkUtils);
-        // VK Utils class for getting names of users in conversations list
-        // #лучшееапивинтернете
-        //   DELETED     VKUtils mVKUtils = new VKUtils(accessToken);
+
+
         // getting the conversations list
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         List<Conversations.ResponseItem> chatList = new ArrayList<>(); // Retrieve chat list from API call
         ChatsListAdapter chatAdapter = new ChatsListAdapter(chatList);
         recyclerView.setAdapter(chatAdapter);
         Log.d("ChatsListActivity", "Set adapter - done");
-        // get chats!
+
         VKAPI VKAPIClient = RetrofitClient
                 .getInstance()
                 .getVKAPI();
@@ -99,10 +89,10 @@ public class ChatsListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Conversations> call, Response<Conversations> response) {
                 Conversations conversations = response.body();
-                Log.d("ChatsListActivity", "Get conv response handled");
+                Log.d("ChatsListActivity", "Get conversations list response handled");
                 if (response.isSuccessful() && conversations.isSuccessful()) {
                     // all things are ok
-                    Log.d("ChatsListActivity", "Successfuly got conversations");
+                    Log.d("ChatsListActivity", "Successfully got the conversations list");
                     List<Conversations.ResponseItem> chatList = conversations.response;
                     chatAdapter.setChatList(chatList);
                 }
@@ -117,8 +107,7 @@ public class ChatsListActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Conversations> call, Throwable t) {
-                Log.d("ChatsListActivity", "Failure", t);
-
+                Log.d("ChatsListActivity", "Failure (getting conversations list)", t);
                 Toast.makeText(ChatsListActivity.this, R.string.http_error, Toast.LENGTH_LONG).show();
             }
         });
@@ -143,7 +132,6 @@ public class ChatsListActivity extends AppCompatActivity {
                     Target target = new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            // Do something with the Bitmap, such as setting it as the icon of the MaterialToolbar
                             toolbar.setLogo(new BitmapDrawable(getResources(), bitmap));
                         }
 

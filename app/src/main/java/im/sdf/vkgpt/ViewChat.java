@@ -1,6 +1,5 @@
 package im.sdf.vkgpt;
 
-import static im.sdf.vkgpt.helpers.Constants.VKSCRIPT_GET_CONVERSATIONS;
 import static im.sdf.vkgpt.helpers.Constants.VKSCRIPT_GET_MESSAGES;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -31,14 +29,11 @@ import im.sdf.vkgpt.helpers.GPTAPI;
 import im.sdf.vkgpt.helpers.RetrofitClient;
 import im.sdf.vkgpt.helpers.VKAPI;
 import im.sdf.vkgpt.helpers.VKUtils;
-import im.sdf.vkgpt.models.ChatsListAdapter;
-import im.sdf.vkgpt.models.Conversations;
 import im.sdf.vkgpt.models.Messages;
 import im.sdf.vkgpt.models.MessagesListAdapter;
 import im.sdf.vkgpt.models.ShortenMessage;
 import im.sdf.vkgpt.models.Suggestions;
 import im.sdf.vkgpt.models.SuggestionsAdapter;
-import im.sdf.vkgpt.models.Users;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,21 +46,20 @@ public class ViewChat extends AppCompatActivity {
         setContentView(R.layout.activity_view_chat);
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        // getting params intent started with
         Intent intent = getIntent();
         String chatName = intent.getStringExtra("chat_name");
         String peerId = intent.getStringExtra("peer_id");
         String photo50 = intent.getStringExtra("photo50");
+
+        // toolbar setting up
         toolbar.setTitle(chatName);
         setChatAvatarToToolbar(photo50, toolbar);
 
-        VKUtils vkUtils = new VKUtils();
 
+        // suggestions stuff
         List<String> suggestionsList = new ArrayList<>();
         RecyclerView recyclerViewSuggestions = findViewById(R.id.recycler_view_suggestions);
         recyclerViewSuggestions.setLayoutManager(new LinearLayoutManager(this));
@@ -73,15 +67,15 @@ public class ViewChat extends AppCompatActivity {
         recyclerViewSuggestions.setAdapter(suggestionsAdapter);
 
 
-        // getting messages & updating it
+        // VK API misc
         SharedPreferences sharedPreferences = getSharedPreferences("VKGPT", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        int userId = sharedPreferences.getInt("user_id", -1);
         String accessToken = sharedPreferences.getString("access_token", "");
+        VKUtils vkUtils = new VKUtils();
 
+
+        // messages list
         RecyclerView recyclerViewMessages = findViewById(R.id.recycler_view_messages);
         recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
-
         List<Messages.Message> messageList = new ArrayList<>();
         MessagesListAdapter messagesAdapter = new MessagesListAdapter(messageList);
         recyclerViewMessages.setAdapter(messagesAdapter);
@@ -141,10 +135,10 @@ public class ViewChat extends AppCompatActivity {
             @Override
             public void onResponse(Call<Messages> call, Response<Messages> response) {
                 Messages messages = response.body();
-                Log.d("ViewChat", "Get conv response handled");
+                Log.d("ViewChat", "Conversation history response handled");
                 if (response.isSuccessful() && messages.isSuccessful()) {
                     // all things are ok
-                    Log.d("ViewChat", "Successfuly got messages");
+                    Log.d("ViewChat", "Successfully got the conversation history");
                     List<Messages.Message> messageList = messages.response;
                     handleSuggestions(getShortenMessages(messageList), suggestionsAdapter);
                     Collections.reverse(messageList);
@@ -153,7 +147,7 @@ public class ViewChat extends AppCompatActivity {
                 }
                 else if (!response.isSuccessful() || !messages.isSuccessful()){
                     // VK rejected the request or the response scheme is incorrect
-                    Log.d("ViewChat", "Rejected callGetMessages");
+                    Log.e("ViewChat", "Failed to get the conversation history");
                     if (messages.error != null) {
                         vkUtils.resolveVKAPIError(messages.error, messages.getErrorMessage(), getApplicationContext(), "ViewChat");
                     }
@@ -162,8 +156,7 @@ public class ViewChat extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Messages> call, Throwable t) {
-                Log.d("ViewChat", "Failure", t);
-
+                Log.d("ViewChat", "Failure (getting conversation messages)", t);
                 Toast.makeText(ViewChat.this, R.string.http_error, Toast.LENGTH_LONG).show();
             }
         });
@@ -179,47 +172,35 @@ public class ViewChat extends AppCompatActivity {
             @Override
             public void onResponse(Call<Suggestions> call, Response<Suggestions> response) {
                 Suggestions suggestions = response.body();
-                Log.d("ViewChat", "Got suggestions response");
+                Log.d("ViewChat", "Get suggestions response handled");
                 if (response.isSuccessful() && suggestions.isSuccessful()) {
                     // all things are ok
-                    Log.d("ViewChatActivity", "Successfuly got suggestions, first: " + suggestions.suggestions.get(0));
+                    Log.d("ViewChatActivity", "Successfully got the suggestions list: " + suggestions.suggestions.toString());
                     List<String> suggestionsList = suggestions.suggestions;
                     suggestionsAdapter.setSuggestionsList(suggestionsList);
                 }
                 else if (!response.isSuccessful() || !suggestions.isSuccessful()){
                     // My API rejected the request or the response scheme is incorrect
-                    Log.d("ChatsListActivity", "Rejected");
+                    Log.e("ChatsListActivity", "Failed to get suggestions list");
+                    Log.e("ChatListActivity", "GPT API Error: " + suggestions.exception);
                     Toast.makeText(ViewChat.this, R.string.error, Toast.LENGTH_LONG).show();
-                    try {
-                        Log.e("ChatView", "Beginning of crash. Is response succesful: " + (response.isSuccessful() ? "true" : "false"));
-                        Log.e("ChatView", "Have ok: " + " ok -> " + (suggestions == null ? "suggestions is null" : suggestions.isOk()));
-                        Log.e("ChatView", "Have sug: " + " sug -> " + (suggestions == null ? "suggestions is null" : suggestions.safeSuggestions()));
-                        Log.e("ChatView", response.errorBody().string());
-                    }
-                    catch (Exception e) {Log.wtf("WTF", e);}
-
-                    Log.e("ChatListActivity", "GPT API Error: " + " b" + suggestions.exception);
                 }
             }
 
             @Override
             public void onFailure(Call<Suggestions> call, Throwable t) {
-                Log.d("ViewChat", "Failure to get suggestions", t);
-
+                Log.d("ViewChat", "Failure (getting suggestions)", t);
                 Toast.makeText(ViewChat.this, R.string.http_error, Toast.LENGTH_LONG).show();
             }
         });
     }
     private List<ShortenMessage> getShortenMessages(List<Messages.Message> messages) {
         List<ShortenMessage> result = new ArrayList<>();
-        List<String> tmp = new ArrayList<>();
         Messages.Message msg;
         for (int i = 0; i < 3 && i < messages.size(); i++) {
             msg = messages.get(i);
             result.add(new ShortenMessage(msg.fromName, msg.text));
-            tmp.add(msg.text);
         }
-        Log.wtf("MessageShortener", tmp.toString());
         return result;
     }
 }
