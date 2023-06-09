@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewChat"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ViewChat">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,20 +17,19 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-<!--            app:layout_constraintBottom_toStartOf="linear_layout_messages">-->
+            <!--            app:layout_constraintBottom_toStartOf="linear_layout_messages">-->
 
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/title_activity_chats_list"
                 app:logo="@drawable/vk_compact_logo"
                 app:menu="@menu/top_app_bar_chats_list"
                 app:navigationIcon="@drawable/ic_arrow_back_24dp"
                 app:navigationIconTint="?attr/colorOnSurfaceVariant"
-                app:titleMarginStart="16dp"
-                />
+                app:title="@string/title_activity_chats_list"
+                app:titleMarginStart="16dp" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,58 +39,57 @@
             android:id="@+id/recycler_view_messages"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintVertical_weight="1"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintVertical_weight="1">
 
             <!-- Scrollable content -->
 
         </androidx.recyclerview.widget.RecyclerView>
 
 
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="0dp"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="0dp"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_suggestions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintVertical_weight="1"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintVertical_weight="1">
 
             <!-- Scrollable content -->
 
         </androidx.recyclerview.widget.RecyclerView>
-<!--        <Button-->
-<!--            android:id="@+id/ai2"-->
-<!--            style="?attr/materialButtonOutlinedStyle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Хорошая идея!"/>-->
-<!--        <Button-->
-<!--            android:id="@+id/ai3"-->
-<!--            style="?attr/materialButtonOutlinedStyle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Не в этот раз :("/>-->
-<!--        <Button-->
-<!--            android:id="@+id/ai5"-->
-<!--            style="?attr/materialButtonOutlinedStyle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="А какие фильмы сейчас показывают?"/>-->
-<!--        <Button-->
-<!--            android:id="@+id/ai6"-->
-<!--            style="?attr/materialButtonOutlinedStyle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Давай, во сколько тебе удобно будет встретиться?"/>-->
-
+        <!--        <Button-->
+        <!--            android:id="@+id/ai2"-->
+        <!--            style="?attr/materialButtonOutlinedStyle"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Хорошая идея!"/>-->
+        <!--        <Button-->
+        <!--            android:id="@+id/ai3"-->
+        <!--            style="?attr/materialButtonOutlinedStyle"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Не в этот раз :("/>-->
+        <!--        <Button-->
+        <!--            android:id="@+id/ai5"-->
+        <!--            style="?attr/materialButtonOutlinedStyle"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="А какие фильмы сейчас показывают?"/>-->
+        <!--        <Button-->
+        <!--            android:id="@+id/ai6"-->
+        <!--            style="?attr/materialButtonOutlinedStyle"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Давай, во сколько тебе удобно будет встретиться?"/>-->
 
 
     </LinearLayout>
@@ -99,9 +97,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout

@@ -1,9 +1,7 @@
 package im.sdf.vkgpt.models;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,21 +10,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import im.sdf.vkgpt.R;
-import im.sdf.vkgpt.ViewChat;
-import im.sdf.vkgpt.helpers.CircleTransform;
 
 public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsHolder> {
     List<String> suggestionsList;
-    String accessToken;
 
     public SuggestionsAdapter(List<String> suggestionsList) {
         this.suggestionsList = suggestionsList;
-        this.accessToken = accessToken;
     }
 
     public void setSuggestionsList(List<String> suggestionsList) {
@@ -47,12 +39,7 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsHolder> 
     public void onBindViewHolder(@NonNull SuggestionsHolder holder, int position) {
         String suggestion = suggestionsList.get(position);
         holder.button.setText(suggestion);
-        holder.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(holder.itemView.getContext(), "clicked on " + suggestion, Toast.LENGTH_SHORT).show();
-            }
-        });
+        holder.button.setOnClickListener(view -> Toast.makeText(holder.itemView.getContext(), "clicked on " + suggestion, Toast.LENGTH_SHORT).show());
     }
 
     @Override

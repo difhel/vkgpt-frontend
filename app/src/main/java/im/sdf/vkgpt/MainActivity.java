@@ -4,38 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import im.sdf.vkgpt.databinding.ActivityMainBinding;
-import im.sdf.vkgpt.LoginActivity;
-import im.sdf.vkgpt.helpers.Constants;
-import im.sdf.vkgpt.helpers.RetrofitClient;
-import im.sdf.vkgpt.helpers.VKAPI;
-import im.sdf.vkgpt.models.AuthResponseSuccess;
-import im.sdf.vkgpt.models.Users;
-import im.sdf.vkgpt.models.VKAPIResponseError;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Arrays;
+import androidx.appcompat.app.AppCompatActivity;
+
+import im.sdf.vkgpt.databinding.ActivityMainBinding;
+import im.sdf.vkgpt.helpers.RetrofitClient;
+import im.sdf.vkgpt.helpers.VKAPI;
+import im.sdf.vkgpt.models.Users;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -76,16 +58,14 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), ChatsListActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
-                }
-                else if (!response.isSuccessful() || !users.isSuccessful()){
+                } else if (!response.isSuccessful() || !users.isSuccessful()) {
                     // VK rejected the request or the response scheme is incorrect
                     finishAffinity();
                     Log.e("MainActivity", "Broken user: " + users.getErrorMessage());
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     // idk when it can be executed
                     showError(getString(R.string.wtf, String.format("User id $1%d, response_is_ok $2%s, users_get_errmsg $3%s", userId, response.isSuccessful() ? "1" : "0", users.getErrorMessage())));
                 }
@@ -97,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showError(int errorMessage) {
         setContentView(binding.getRoot());
         View errorBlock = findViewById(R.id.splashscreen_error);

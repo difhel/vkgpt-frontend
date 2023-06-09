@@ -9,19 +9,18 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,8 +94,7 @@ public class ChatsListActivity extends AppCompatActivity {
                     Log.d("ChatsListActivity", "Successfully got the conversations list");
                     List<Conversations.ResponseItem> chatList = conversations.response;
                     chatAdapter.setChatList(chatList);
-                }
-                else if (!response.isSuccessful() || !conversations.isSuccessful()){
+                } else if (!response.isSuccessful() || !conversations.isSuccessful()) {
                     // VK rejected the request or the response scheme is incorrect
                     Log.d("ChatsListActivity", "Rejected");
                     if (conversations.error != null) {
@@ -112,6 +110,7 @@ public class ChatsListActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setAvatarToToolbar(int userId, String accessToken, VKUtils vkUtils) {
         VKAPI VKAPIClient = RetrofitClient
                 .getInstance()
@@ -148,8 +147,7 @@ public class ChatsListActivity extends AppCompatActivity {
                     };
 
                     Picasso.get().load(users.response.get(0).photo50).resizeDimen(R.dimen.topbar_avatar_size, R.dimen.topbar_avatar_size).transform(new CircleTransform()).into(target);
-                }
-                else if (!response.isSuccessful() || !users.isSuccessful()){
+                } else if (!response.isSuccessful() || !users.isSuccessful()) {
                     // VK rejected the request or the response scheme is incorrect
                     if (users.error != null) {
                         vkUtils.resolveVKAPIError(users.error, users.getErrorMessage(), getApplicationContext(), "ChatsListActivity");

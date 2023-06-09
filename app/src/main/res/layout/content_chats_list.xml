@@ -13,11 +13,10 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/title_activity_chats_list"
             app:logo="@drawable/vk_compact_logo"
             app:menu="@menu/top_app_bar_chats_list"
-            app:titleMarginStart="32dp"
-            />
+            app:title="@string/title_activity_chats_list"
+            app:titleMarginStart="32dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

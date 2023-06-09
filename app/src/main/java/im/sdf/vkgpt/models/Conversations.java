@@ -1,17 +1,11 @@
 package im.sdf.vkgpt.models;
 
-//import android.util.Log;
 
 import android.util.Pair;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.function.Function;
-
-import im.sdf.vkgpt.helpers.VKUtils;
 
 public class Conversations {
     @SerializedName("response")
@@ -27,6 +21,7 @@ public class Conversations {
     public String getErrorMessage() {
         return error != null ? String.format("%d %s", error.errorCode, error.errorDescription) : "Cannot get error";
     }
+
     public class ResponseItem {
         @SerializedName("peer_id")
         public Integer peerId;
@@ -43,16 +38,18 @@ public class Conversations {
         @SerializedName("last_message")
         public Message lastMessage;
 
-        public String getName(){
+        public String getName() {
             return name != null ? name : "";
         }
 
-        public Pair<String, Pair<String, String>> getText(){
+        public Pair<String, Pair<String, String>> getText() {
             return lastMessage != null ? lastMessage.getText() : new Pair<>("CHAT_STARTED", new Pair<>("", ""));
         }
+
         public String getAvatar() {
             return photo50 != null ? photo50 : "https://vk.com/images/camera_50.png";
         }
+
         public int getUnreadCount() {
             return unreadCount != null ? unreadCount : 0;
         }
@@ -93,8 +90,7 @@ public class Conversations {
             // types of attachments: PLAIN, PHOTO, DOC, OTHER
             if (text != null && !text.equals("")) {
                 return new Pair<>("PLAIN", new Pair<>(text, getFromName() + ": "));
-            }
-            else if (attachments.size() > 0) {
+            } else if (attachments.size() > 0) {
                 Pair<String, Pair<String, String>> result = new Pair<>("", new Pair<>("", ""));
                 if (attachments.size() > 1) {
                     return new Pair<>("OTHER", new Pair<>("", getFromName() + ": "));

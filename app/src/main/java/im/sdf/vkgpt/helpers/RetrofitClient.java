@@ -11,8 +11,8 @@ public class RetrofitClient {
 
     private static RetrofitClient instance;
 
-    private Retrofit retrofitVK;
-    private Retrofit retrofitGPT;
+    private final Retrofit retrofitVK;
+    private final Retrofit retrofitGPT;
 
     private RetrofitClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

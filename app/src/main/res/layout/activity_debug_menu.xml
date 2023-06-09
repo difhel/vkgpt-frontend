@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DebugMenuActivity"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:context=".DebugMenuActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,8 +29,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        >
+        android:padding="16dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,15 +54,14 @@
         android:id="@+id/buttonSaveDebugMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Apply"
         android:layout_marginLeft="16dp"
-        />
+        android:text="Apply" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        >
+        android:padding="16dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,13 +79,10 @@
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test API"
             android:layout_marginLeft="16dp"
-            />
+            android:text="Test API" />
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>

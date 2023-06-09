@@ -83,19 +83,19 @@ public class MessagesListAdapter extends RecyclerView.Adapter<MessagesListHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(holder.itemView.getContext(), "clicked on " + String.valueOf(message.id), Toast.LENGTH_SHORT).show();
+                Toast.makeText(holder.itemView.getContext(), "clicked on " + message.id, Toast.LENGTH_SHORT).show();
             }
         });
         if (message.fromId.equals(userId)){
-            Log.wtf("EQUALS", String.valueOf(message.fromId) + " " + String.valueOf(userId));
+            Log.wtf("EQUALS", message.fromId + " " + userId);
             holder.itemView.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
-        Log.wtf("ACCESS", String.valueOf(message.fromId) + " " + String.valueOf(userId));
+        Log.wtf("ACCESS", message.fromId + " " + userId);
         if (avatar != null && !avatar.isEmpty()) {
             Picasso.get().load(avatar).resizeDimen(R.dimen.message_avatar_size, R.dimen.message_avatar_size).transform(new CircleTransform()).into(holder.userAvatar);
         }
         else {
-            Log.wtf("BrokenImageMsgListGen", String.format("Broken image for %s", String.valueOf(message.fromId)));
+            Log.wtf("BrokenImageMsgListGen", String.format("Broken image for %s", message.fromId));
         }
 //        Log.d("ChatAT", accessToken);
 //        notifyDataSetChanged();

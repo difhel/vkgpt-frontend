@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,8 +21,8 @@ import com.squareup.picasso.Picasso;
 import im.sdf.vkgpt.helpers.Constants;
 import im.sdf.vkgpt.helpers.RetrofitClient;
 import im.sdf.vkgpt.helpers.VKAPI;
-import im.sdf.vkgpt.models.VKAPIResponseError;
 import im.sdf.vkgpt.models.AuthResponseSuccess;
+import im.sdf.vkgpt.models.VKAPIResponseError;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,6 +30,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsername, etPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     private void loginUser(String captchaSid, String captchaKey) {
         final String userName = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
@@ -93,14 +94,12 @@ public class LoginActivity extends AppCompatActivity {
                         editor.apply();
                         finishAffinity();
                         startActivity(new Intent(getApplicationContext(), ChatsListActivity.class));
-                    }
-                    else {
+                    } else {
                         Log.wtf("LoginActivity", "VK returned a success response but it does not contain access token");
                         Toast.makeText(LoginActivity.this, R.string.http_error, Toast.LENGTH_LONG).show();
                         return;
                     }
-                }
-                else {
+                } else {
                     // request failed
                     try {
                         String errorJSON = response.errorBody().string();
@@ -134,12 +133,10 @@ public class LoginActivity extends AppCompatActivity {
                         if (authResponseError.error != null) {
                             Log.e("LoginActivity", "Authentication failed: " + authResponseError.error + " " + authResponseError.errorDescription());
                             Toast.makeText(LoginActivity.this, getString(R.string.login_failed, authResponseError.error, authResponseError.errorDescription()), Toast.LENGTH_SHORT).show();
-                        }
-                        else {
+                        } else {
                             throw new java.io.IOException();
                         }
-                    }
-                    catch (java.io.IOException e) {
+                    } catch (java.io.IOException e) {
                         Log.wtf("LoginActivity", "VK returned a error response but it does not contain error info. Probably it is a problem on VK side.");
                         Toast.makeText(LoginActivity.this, R.string.http_error, Toast.LENGTH_LONG).show();
                     }
@@ -154,5 +151,5 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
         });
-}
+    }
 }

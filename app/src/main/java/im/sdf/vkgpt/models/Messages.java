@@ -1,7 +1,5 @@
 package im.sdf.vkgpt.models;
 
-//import android.util.Log;
-
 import android.util.Pair;
 
 import com.google.gson.annotations.SerializedName;
@@ -22,6 +20,7 @@ public class Messages {
     public String getErrorMessage() {
         return error != null ? String.format("%d %s", error.errorCode, error.errorDescription) : "Cannot get error";
     }
+
     public class Message {
         @SerializedName("date")
         public Integer date;
@@ -68,8 +67,7 @@ public class Messages {
             // types of attachments: PLAIN, PHOTO, DOC, OTHER
             if (text != null && !text.equals("")) {
                 return new Pair<>("PLAIN", new Pair<>(text, getFromName() + ": "));
-            }
-            else if (attachments.size() > 0) {
+            } else if (attachments.size() > 0) {
                 Pair<String, Pair<String, String>> result = new Pair<>("", new Pair<>("", ""));
                 if (attachments.size() > 1) {
                     return new Pair<>("OTHER", new Pair<>("", getFromName() + ": "));

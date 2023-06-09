@@ -5,33 +5,30 @@
     android:layout_height="wrap_content"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:padding="16dp"
-    >
+    android:padding="16dp">
 
-    <!--    android:layoutDirection="rtl"-->
-    <!-- ^^ for messages sent by the app user-->
 
     <ImageView
         android:id="@+id/user_avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/vk_compact_logo"
-        android:paddingTop="4dp"/>
+        android:paddingTop="4dp"
+        android:src="@drawable/vk_compact_logo" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginStart="12dp"
-        android:orientation="vertical"
-        android:layout_gravity="center" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Даниил Миронов"
-            android:textStyle="bold"
-            android:textAppearance="?android:textAppearanceSmall" />
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/message_text"
@@ -45,6 +42,6 @@
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
 </LinearLayout>

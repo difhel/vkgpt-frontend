@@ -2,10 +2,6 @@ package im.sdf.vkgpt;
 
 import static im.sdf.vkgpt.helpers.Constants.VKSCRIPT_GET_MESSAGES;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +11,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.squareup.picasso.Picasso;
@@ -92,6 +92,7 @@ public class ViewChat extends AppCompatActivity {
                 vkUtils
         );
     }
+
     private void setChatAvatarToToolbar(String photo50, MaterialToolbar toolbar) {
         Target target = new Target() {
             @Override
@@ -114,6 +115,7 @@ public class ViewChat extends AppCompatActivity {
 
         Picasso.get().load(photo50).resizeDimen(R.dimen.topbar_avatar_size, R.dimen.topbar_avatar_size).transform(new CircleTransform()).into(target);
     }
+
     private void handleMessages(
             RecyclerView recyclerViewMessages,
             VKAPI VKAPIClient,
@@ -161,8 +163,7 @@ public class ViewChat extends AppCompatActivity {
                     Collections.reverse(messageList);
                     messagesAdapter.setChatList(messageList);
                     recyclerViewMessages.scrollToPosition(messageList.size() - 1); // we want to show the last message
-                }
-                else if (!response.isSuccessful() || !messages.isSuccessful()){
+                } else if (!response.isSuccessful() || !messages.isSuccessful()) {
                     // VK rejected the request or the response scheme is incorrect
                     Log.e("ViewChat", "Failed to get the conversation history");
                     if (messages.error != null) {
@@ -178,6 +179,7 @@ public class ViewChat extends AppCompatActivity {
             }
         });
     }
+
     private void handleSuggestions(List<ShortenMessage> shortenMessages, SuggestionsAdapter suggestionsAdapter) {
         if (false) {
             // testing!
@@ -204,8 +206,7 @@ public class ViewChat extends AppCompatActivity {
                     Log.d("ViewChatActivity", "Successfully got the suggestions list: " + suggestions.suggestions.toString());
                     List<String> suggestionsList = suggestions.suggestions;
                     suggestionsAdapter.setSuggestionsList(suggestionsList);
-                }
-                else if (!response.isSuccessful() || !suggestions.isSuccessful()){
+                } else if (!response.isSuccessful() || !suggestions.isSuccessful()) {
                     // My API rejected the request or the response scheme is incorrect
                     Log.e("ChatsListActivity", "Failed to get suggestions list");
                     Log.e("ChatListActivity", "GPT API Error: " + suggestions.exception);
@@ -220,6 +221,7 @@ public class ViewChat extends AppCompatActivity {
             }
         });
     }
+
     private List<ShortenMessage> getShortenMessages(List<Messages.Message> messages) {
         List<ShortenMessage> result = new ArrayList<>();
         Messages.Message msg;

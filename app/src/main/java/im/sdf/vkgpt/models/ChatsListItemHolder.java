@@ -1,22 +1,18 @@
 package im.sdf.vkgpt.models;
 
-import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import org.w3c.dom.Text;
 
 import im.sdf.vkgpt.R;
 
 public class ChatsListItemHolder extends RecyclerView.ViewHolder {
     TextView chatName;
     TextView chatText;
-
     ImageView chatAvatar;
-
     TextView chatUnreadCount;
 
     public ChatsListItemHolder(@NonNull View itemView) {

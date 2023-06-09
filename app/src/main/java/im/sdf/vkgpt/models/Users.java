@@ -1,7 +1,5 @@
 package im.sdf.vkgpt.models;
 
-import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
