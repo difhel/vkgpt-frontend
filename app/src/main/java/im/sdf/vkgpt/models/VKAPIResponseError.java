@@ -15,6 +15,9 @@ public class VKAPIResponseError {
     @SerializedName("captcha_sid")
     public String captchaSid;
 
+    @SerializedName("redirect_uri")
+    public String redirect_uri;
+
     public String errorDescription() {
         return errorDescription == null ? "" : errorDescription;
     }

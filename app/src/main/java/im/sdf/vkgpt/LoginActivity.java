@@ -107,16 +107,12 @@ public class LoginActivity extends AppCompatActivity {
                         VKAPIResponseError authResponseError = new Gson().fromJson(errorJSON, VKAPIResponseError.class);
                         if (authResponseError.error != null && authResponseError.error.equals("need_captcha")) {
                             MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(LoginActivity.this);
-//                                    .setTitle("Captcha")
-//                                    .setMessage("Enter captcha")
-//                                    .setNeutralButton("Cancel", null)
-//                                    .setView(new Button(LoginActivity.this))
-//                                    .show();
                             View customAlertDialogView = LayoutInflater.from(LoginActivity.this)
                                     .inflate(R.layout.captcha_box, null, false);
                             ImageView captchaImage = customAlertDialogView.findViewById(R.id.captcha_box_image);
                             Picasso.get().load(authResponseError.captchaImg).resizeDimen(R.dimen.captcha_height, R.dimen.captcha_width).into(captchaImage);
                             TextInputEditText captchaEditText = customAlertDialogView.findViewById(R.id.captcha_text);
+
                             // Building the Alert dialog using materialAlertDialogBuilder instance
                             materialAlertDialogBuilder.setView(customAlertDialogView)
                                     .setTitle(getString(R.string.captcha_caption))
@@ -129,7 +125,11 @@ public class LoginActivity extends AppCompatActivity {
                                         dialog.cancel();
                                     })
                                     .show();
-//            .show()
+                        }
+                        if (authResponseError.error != null && authResponseError.error.equals("need_validation")) {
+                            Intent intent = new Intent(getApplicationContext(), LoginTwoFaActivity.class);
+                            intent.putExtra("vk2fa_url", authResponseError.redirect_uri);
+                            startActivity(intent);
                         }
                         if (authResponseError.error != null) {
                             Log.e("LoginActivity", "Authentication failed: " + authResponseError.error + " " + authResponseError.errorDescription());
