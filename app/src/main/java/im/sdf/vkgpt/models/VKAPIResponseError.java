@@ -9,6 +9,12 @@ public class VKAPIResponseError {
     @SerializedName("error_description")
     public String errorDescription;
 
+    @SerializedName("captcha_img")
+    public String captchaImg;
+
+    @SerializedName("captcha_sid")
+    public String captchaSid;
+
     public String errorDescription() {
         return errorDescription == null ? "" : errorDescription;
     }

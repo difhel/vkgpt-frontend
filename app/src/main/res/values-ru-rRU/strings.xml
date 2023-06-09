@@ -30,4 +30,8 @@
     <string name="docs">Вложения</string>
     <string name="title_activity_view_chat">Чат</string>
     <string name="message">Сообщение</string>
+    <string name="captcha_caption">Введите код с картинки</string>
+    <string name="captcha_hint">Код с картинки</string>
+    <string name="continue_hint">Продолжить</string>
+    <string name="cancel_hint">Отмена</string>
 </resources>

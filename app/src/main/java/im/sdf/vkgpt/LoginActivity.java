@@ -5,13 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import im.sdf.vkgpt.helpers.Constants;
 import im.sdf.vkgpt.helpers.RetrofitClient;
@@ -34,11 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.login_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginUser();
+                loginUser("", "");
             }
         });
     }
-    private void loginUser() {
+    private void loginUser(String captchaSid, String captchaKey) {
         final String userName = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
@@ -64,7 +70,9 @@ public class LoginActivity extends AppCompatActivity {
                 userName,
                 password,
                 "all,offline",
-                "VKGPTAndroid(1.0)"
+                "VKGPTAndroid(1.0)",
+                captchaSid,
+                captchaKey
         );
 
         callAuth.enqueue(new Callback<AuthResponseSuccess>() {
@@ -97,9 +105,35 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         String errorJSON = response.errorBody().string();
                         VKAPIResponseError authResponseError = new Gson().fromJson(errorJSON, VKAPIResponseError.class);
+                        if (authResponseError.error != null && authResponseError.error.equals("need_captcha")) {
+                            MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(LoginActivity.this);
+//                                    .setTitle("Captcha")
+//                                    .setMessage("Enter captcha")
+//                                    .setNeutralButton("Cancel", null)
+//                                    .setView(new Button(LoginActivity.this))
+//                                    .show();
+                            View customAlertDialogView = LayoutInflater.from(LoginActivity.this)
+                                    .inflate(R.layout.captcha_box, null, false);
+                            ImageView captchaImage = customAlertDialogView.findViewById(R.id.captcha_box_image);
+                            Picasso.get().load(authResponseError.captchaImg).resizeDimen(R.dimen.captcha_height, R.dimen.captcha_width).into(captchaImage);
+                            TextInputEditText captchaEditText = customAlertDialogView.findViewById(R.id.captcha_text);
+                            // Building the Alert dialog using materialAlertDialogBuilder instance
+                            materialAlertDialogBuilder.setView(customAlertDialogView)
+                                    .setTitle(getString(R.string.captcha_caption))
+                                    .setPositiveButton(getString(R.string.continue_hint), (dialog, t) -> {
+                                        String captchaKey = captchaEditText.getText().toString();
+                                        loginUser(authResponseError.captchaSid, captchaKey);
+                                        dialog.dismiss();
+                                    })
+                                    .setNegativeButton(getString(R.string.cancel_hint), (dialog, t) -> {
+                                        dialog.cancel();
+                                    })
+                                    .show();
+//            .show()
+                        }
                         if (authResponseError.error != null) {
                             Log.e("LoginActivity", "Authentication failed: " + authResponseError.error + " " + authResponseError.errorDescription());
-                            Toast.makeText(LoginActivity.this, getString(R.string.login_failed, authResponseError.error, authResponseError.errorDescription()), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, getString(R.string.login_failed, authResponseError.error, authResponseError.errorDescription()), Toast.LENGTH_SHORT).show();
                         }
                         else {
                             throw new java.io.IOException();

@@ -50,6 +50,14 @@ public class Messages {
         @SerializedName("attachments")
         public List<Attachment> attachments;
 
+        public Message(String fromName, String photo50, String text, List<Attachment> attachments) {
+            this.fromName = fromName;
+            this.photo50 = photo50;
+            this.text = text;
+            this.attachments = attachments;
+            this.fromId = -10;
+        }
+
         public String getFromName() {
             return fromName != null && !fromName.equals("") ? fromName : "UNSUPPORTEDJAVA";
         }

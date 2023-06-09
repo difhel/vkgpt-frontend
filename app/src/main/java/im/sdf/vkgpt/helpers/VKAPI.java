@@ -21,7 +21,9 @@ public interface VKAPI {
             @Query("username") String username,
             @Query("password") String password,
             @Query("scope") String scope,
-            @Query("device_id") String deviceId
+            @Query("device_id") String deviceId,
+            @Query("captcha_sid") String captchaSid,
+            @Query("captcha_key") String captchaKey
     );
 
     @GET("method/users.get")

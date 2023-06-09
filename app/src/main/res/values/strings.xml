@@ -34,4 +34,8 @@
     <string name="docs">Attachments</string>
     <string name="title_activity_view_chat">Chat</string>
     <string name="message">Message</string>
+    <string name="captcha_caption">Enter the code from image below</string>
+    <string name="captcha_hint">Code</string>
+    <string name="continue_hint">Continue</string>
+    <string name="cancel_hint">Cancel</string>
 </resources>

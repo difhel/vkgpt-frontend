@@ -123,6 +123,23 @@ public class ViewChat extends AppCompatActivity {
             MessagesListAdapter messagesAdapter,
             VKUtils vkUtils
     ) {
+        if (false) {
+            // testing!
+            List<Messages.Message> messageList = new ArrayList<>();
+            messageList.add(new Messages().new Message("Марк Фомин", "https://sun6-22.userapi.com/s/v1/ig2/rNvPk9J2RIA6ZUmeHmxzB_dxPGIIXTgVTmNgQRr2QbX36Gy9qp_cMlSeVBU0uv8lO__RElFLcJ18OH4EQQRM5cah.jpg?size=50x50&quality=95&crop=0,0,800,800&ava=1", "Ух, только закончил с работой!", new ArrayList<>()));
+            messageList.add(new Messages().new Message("Марк Фомин", "https://sun6-22.userapi.com/s/v1/ig2/rNvPk9J2RIA6ZUmeHmxzB_dxPGIIXTgVTmNgQRr2QbX36Gy9qp_cMlSeVBU0uv8lO__RElFLcJ18OH4EQQRM5cah.jpg?size=50x50&quality=95&crop=0,0,800,800&ava=1", "Ух, только закончил с работой!", new ArrayList<>()));
+            messageList.add(new Messages().new Message("Марк Фомин", "https://sun6-22.userapi.com/s/v1/ig2/rNvPk9J2RIA6ZUmeHmxzB_dxPGIIXTgVTmNgQRr2QbX36Gy9qp_cMlSeVBU0uv8lO__RElFLcJ18OH4EQQRM5cah.jpg?size=50x50&quality=95&crop=0,0,800,800&ava=1", "Ух, только закончил с работой!", new ArrayList<>()));
+            messageList.add(new Messages().new Message("Марк Фомин", "https://sun6-22.userapi.com/s/v1/ig2/rNvPk9J2RIA6ZUmeHmxzB_dxPGIIXTgVTmNgQRr2QbX36Gy9qp_cMlSeVBU0uv8lO__RElFLcJ18OH4EQQRM5cah.jpg?size=50x50&quality=95&crop=0,0,800,800&ava=1", "Ух, только закончил с работой!", new ArrayList<>()));
+            messageList.add(new Messages().new Message("Марк Фомин", "https://sun6-22.userapi.com/s/v1/ig2/rNvPk9J2RIA6ZUmeHmxzB_dxPGIIXTgVTmNgQRr2QbX36Gy9qp_cMlSeVBU0uv8lO__RElFLcJ18OH4EQQRM5cah.jpg?size=50x50&quality=95&crop=0,0,800,800&ava=1", "Ух, только закончил с работой!", new ArrayList<>()));
+            messageList.add(new Messages().new Message("Марк Фомин", "https://sun6-22.userapi.com/s/v1/ig2/rNvPk9J2RIA6ZUmeHmxzB_dxPGIIXTgVTmNgQRr2QbX36Gy9qp_cMlSeVBU0uv8lO__RElFLcJ18OH4EQQRM5cah.jpg?size=50x50&quality=95&crop=0,0,800,800&ava=1", "Ух, только закончил с работой!", new ArrayList<>()));
+            messageList.add(new Messages().new Message("Марк Фомин", "https://sun6-22.userapi.com/s/v1/ig2/rNvPk9J2RIA6ZUmeHmxzB_dxPGIIXTgVTmNgQRr2QbX36Gy9qp_cMlSeVBU0uv8lO__RElFLcJ18OH4EQQRM5cah.jpg?size=50x50&quality=95&crop=0,0,800,800&ava=1", "Ух, только закончил с работой!", new ArrayList<>()));
+            messageList.add(new Messages().new Message("Mark", "https://sun6-22.userapi.com/s/v1/ig2/rNvPk9J2RIA6ZUmeHmxzB_dxPGIIXTgVTmNgQRr2QbX36Gy9qp_cMlSeVBU0uv8lO__RElFLcJ18OH4EQQRM5cah.jpg?size=50x50&quality=95&crop=0,0,800,800&ava=1", "Hello, wassup?", new ArrayList<>()));
+            messageList.add(new Messages().new Message("Ilya", "https://sun6-20.userapi.com/s/v1/ig2/vwamuU4GFdvG9r1MkyBjCfdmMpiKeZhSOb4nxSJF5MtMdr-SZoAXRBRjKkkvsVUKTe3RqlD8W0-LmynS6pkyBNzk.jpg?size=50x50&quality=95&crop=0,21,2027,2027&ava=1", "Hi, I'm great! How are you?", new ArrayList<>()));
+            messagesAdapter.setChatList(messageList);
+            recyclerViewMessages.scrollToPosition(messageList.size() - 1);
+            handleSuggestions(getShortenMessages(messageList), suggestionsAdapter);
+            return;
+        }
         Call<Messages> callGetMessages = VKAPIClient.executeGetMessages(
                 VKSCRIPT_GET_MESSAGES,
                 0,
@@ -162,6 +179,15 @@ public class ViewChat extends AppCompatActivity {
         });
     }
     private void handleSuggestions(List<ShortenMessage> shortenMessages, SuggestionsAdapter suggestionsAdapter) {
+        if (false) {
+            // testing!
+            List<String> tmpSuggestionsList = new ArrayList<>();
+            tmpSuggestionsList.add("Great!");
+            tmpSuggestionsList.add("Perfect!");
+            tmpSuggestionsList.add("Everything is down");
+            suggestionsAdapter.setSuggestionsList(tmpSuggestionsList);
+            return;
+        }
         GPTAPI GPTAPIClient = RetrofitClient
                 .getInstance()
                 .getGPTAPI();

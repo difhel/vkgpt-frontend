@@ -6,4 +6,6 @@
     <dimen name="topbar_avatar_size">32dp</dimen>
     <dimen name="chatslist_avatar_size">42dp</dimen>
     <dimen name="message_avatar_size">32dp</dimen>
+    <dimen name="captcha_height">195dp</dimen>
+    <dimen name="captcha_width">75dp</dimen>
 </resources>
