@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                 .getVKAPI();
         Call<AuthResponseSuccess> callAuth = VKAPIClient.authenticate(
                 1,
-                0,
+                1,
                 "password",
                 Constants.CLIENT_ID,
                 Constants.CLIENT_SECRET,
