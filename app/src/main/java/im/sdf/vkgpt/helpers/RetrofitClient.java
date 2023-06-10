@@ -1,5 +1,7 @@
 package im.sdf.vkgpt.helpers;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -14,6 +16,8 @@ public class RetrofitClient {
     private final Retrofit retrofitVK;
     private final Retrofit retrofitGPT;
 
+    private final Retrofit retrofitLongpoll;
+
     private RetrofitClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -27,6 +31,13 @@ public class RetrofitClient {
                 .baseUrl(BASE_URL_GPT_API)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
+                .build();
+
+        retrofitLongpoll = new Retrofit.Builder()
+                .baseUrl(BASE_URL_VK_ME_API)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.connectTimeout(100, TimeUnit.SECONDS)
+                        .readTimeout(100, TimeUnit.SECONDS).build())
                 .build();
     }
 
@@ -43,5 +54,9 @@ public class RetrofitClient {
 
     public GPTAPI getGPTAPI() {
         return retrofitGPT.create(GPTAPI.class);
+    }
+
+    public VKMessagesLongpoll getLongpoll() {
+        return retrofitLongpoll.create(VKMessagesLongpoll.class);
     }
 }

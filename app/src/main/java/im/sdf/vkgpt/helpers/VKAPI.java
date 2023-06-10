@@ -1,6 +1,7 @@
 package im.sdf.vkgpt.helpers;
 
 import im.sdf.vkgpt.models.AuthResponseSuccess;
+import im.sdf.vkgpt.models.Conversation;
 import im.sdf.vkgpt.models.Conversations;
 import im.sdf.vkgpt.models.Groups;
 import im.sdf.vkgpt.models.Messages;
@@ -56,6 +57,14 @@ public interface VKAPI {
             @Query("code") String code,
             @Query("offset") int offset,
             @Query("count") int count,
+            @Query("access_token") String accessToken,
+            @Query("v") String v
+    );
+
+    @GET("method/execute")
+    Call<Conversation> executeGetChat(
+            @Query("code") String code,
+            @Query("peer_id") int peerId,
             @Query("access_token") String accessToken,
             @Query("v") String v
     );

@@ -30,7 +30,12 @@ public class ChatsListAdapter extends RecyclerView.Adapter<ChatsListItemHolder> 
     @SuppressLint("NotifyDataSetChanged")
     public void setChatList(List<Conversations.ResponseItem> chatList) {
         this.chatList = chatList;
+        Log.wtf("ChatsListAdapter", "Updating the list of the chats");
         notifyDataSetChanged();
+    }
+
+    public List<Conversations.ResponseItem> getChatList() {
+        return this.chatList;
     }
 
     @NonNull
