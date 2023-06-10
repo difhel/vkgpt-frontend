@@ -160,6 +160,11 @@ public class ChatsListActivity extends AppCompatActivity implements LongpollList
                             // all things are ok
                             Log.d("ChatsListActivity", "Successfully got the conversations list");
                             Conversations.ResponseItem chatR = chat.response;
+                            if (chatR == null) {
+                                // idk why, but it causes crashes
+                                Log.wtf("ChatsListActivity", "Bad chat that returns null in request with VKScript: " + String.valueOf(peerId));
+                                return;
+                            }
                             for (int i = 0; i < chatList.size(); i++) {
                                 if (chatList.get(i).peerId.equals(peerId)) {
                                     chatList.remove(i);

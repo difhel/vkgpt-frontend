@@ -49,6 +49,9 @@ public class ChatsListAdapter extends RecyclerView.Adapter<ChatsListItemHolder> 
     @Override
     public void onBindViewHolder(@NonNull ChatsListItemHolder holder, int position) {
         Conversations.ResponseItem chat = chatList.get(position);
+        if (chat == null) {
+            Log.wtf("ChatsListAdapterPrecrash", "Chat is null, position: " + String.valueOf(position));
+        }
         String name = chat.getName(); // name
         Pair<String, Pair<String, String>> _text = chat.getText(); // text
         String text = _text.second.second + _text.second.first;
