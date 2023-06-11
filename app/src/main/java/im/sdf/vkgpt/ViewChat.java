@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -98,8 +97,49 @@ public class ViewChat extends AppCompatActivity implements LongpollListener {
         findViewById(R.id.sendButton).setOnClickListener(v -> {
             EditText msg = findViewById(R.id.messageTextField);
             String message = msg.getText().toString();
-            sendMessage(message, Integer.parseInt(peerId));
+            sendMessage(message);
             msg.getText().clear();
+        });
+    }
+
+    public void sendMessage(String message) {
+        Intent intent = getIntent();
+        Integer peerId = Integer.parseInt(intent.getStringExtra("peer_id"));
+        SharedPreferences sharedPreferences = getSharedPreferences("VKGPT", Context.MODE_PRIVATE);
+        String accessToken = sharedPreferences.getString("access_token", "");
+        VKUtils vkUtils = new VKUtils();
+        VKAPI VKAPIClient = RetrofitClient
+                .getInstance()
+                .getVKAPI();
+        Call<SendMessageResponse> callSendMessage = VKAPIClient.sendMessage(
+                peerId,
+                message,
+                0,
+                accessToken,
+                "5.131"
+        );
+        callSendMessage.enqueue(new Callback<SendMessageResponse>() {
+            @Override
+            public void onResponse(Call<SendMessageResponse> call, Response<SendMessageResponse> response) {
+                SendMessageResponse messages = response.body();
+                Log.d("ViewChat", "Conversation history response handled");
+                if (response.isSuccessful() && messages.isSuccessful()) {
+                    // all things are ok
+                    Log.d("ViewChat", "Successfully sent message");
+                } else if (!response.isSuccessful() || !messages.isSuccessful()) {
+                    // VK rejected the request or the response scheme is incorrect
+                    Log.e("ViewChat", "Failed to send message");
+                    if (messages.error != null) {
+                        vkUtils.resolveVKAPIError(messages.error, messages.getErrorMessage(), getApplicationContext(), "ViewChat");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SendMessageResponse> call, Throwable t) {
+                Log.d("ViewChat", "Failure (sending message)", t);
+                Toast.makeText(getApplicationContext(), R.string.http_error, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -286,42 +326,5 @@ public class ViewChat extends AppCompatActivity implements LongpollListener {
         return result;
     }
 
-    private void sendMessage(String message, Integer peerId) {
-        SharedPreferences sharedPreferences = getSharedPreferences("VKGPT", Context.MODE_PRIVATE);
-        String accessToken = sharedPreferences.getString("access_token", "");
-        VKUtils vkUtils = new VKUtils();
-        VKAPI VKAPIClient = RetrofitClient
-                .getInstance()
-                .getVKAPI();
-        Call<SendMessageResponse> callSendMessage = VKAPIClient.sendMessage(
-                peerId,
-                message,
-                0,
-                accessToken,
-                "5.131"
-        );
-        callSendMessage.enqueue(new Callback<SendMessageResponse>() {
-            @Override
-            public void onResponse(Call<SendMessageResponse> call, Response<SendMessageResponse> response) {
-                SendMessageResponse messages = response.body();
-                Log.d("ViewChat", "Conversation history response handled");
-                if (response.isSuccessful() && messages.isSuccessful()) {
-                    // all things are ok
-                    Log.d("ViewChat", "Successfully sent message");
-                } else if (!response.isSuccessful() || !messages.isSuccessful()) {
-                    // VK rejected the request or the response scheme is incorrect
-                    Log.e("ViewChat", "Failed to send message");
-                    if (messages.error != null) {
-                        vkUtils.resolveVKAPIError(messages.error, messages.getErrorMessage(), getApplicationContext(), "ViewChat");
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<SendMessageResponse> call, Throwable t) {
-                Log.d("ViewChat", "Failure (sending message)", t);
-                Toast.makeText(ViewChat.this, R.string.http_error, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 }

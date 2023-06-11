@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import im.sdf.vkgpt.R;
+import im.sdf.vkgpt.ViewChat;
 
 public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsHolder> {
     List<String> suggestionsList;
@@ -39,7 +39,9 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsHolder> 
     public void onBindViewHolder(@NonNull SuggestionsHolder holder, int position) {
         String suggestion = suggestionsList.get(position);
         holder.button.setText(suggestion);
-        holder.button.setOnClickListener(view -> Toast.makeText(holder.itemView.getContext(), "clicked on " + suggestion, Toast.LENGTH_SHORT).show());
+        holder.button.setOnClickListener(view -> {
+            ((ViewChat) holder.itemView.getContext()).sendMessage(suggestion);
+        });
     }
 
     @Override
