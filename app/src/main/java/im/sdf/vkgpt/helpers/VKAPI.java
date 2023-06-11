@@ -5,6 +5,7 @@ import im.sdf.vkgpt.models.Conversation;
 import im.sdf.vkgpt.models.Conversations;
 import im.sdf.vkgpt.models.Groups;
 import im.sdf.vkgpt.models.Messages;
+import im.sdf.vkgpt.models.SendMessageResponse;
 import im.sdf.vkgpt.models.Users;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -57,6 +58,15 @@ public interface VKAPI {
             @Query("code") String code,
             @Query("offset") int offset,
             @Query("count") int count,
+            @Query("access_token") String accessToken,
+            @Query("v") String v
+    );
+
+    @GET("method/messages.send")
+    Call<SendMessageResponse> sendMessage(
+            @Query("peer_id") Integer peer_id,
+            @Query("message") String message,
+            @Query("random_id") int count,
             @Query("access_token") String accessToken,
             @Query("v") String v
     );

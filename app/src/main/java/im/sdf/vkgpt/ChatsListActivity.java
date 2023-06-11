@@ -78,7 +78,10 @@ public class ChatsListActivity extends AppCompatActivity implements LongpollList
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(chatAdapter);
         Log.d("ChatsListActivity", "Set adapter - done");
+        renderChats(accessToken, vkUtils);
+    }
 
+    private void renderChats(String accessToken, VKUtils vkUtils) {
         VKAPI VKAPIClient = RetrofitClient
                 .getInstance()
                 .getVKAPI();
@@ -121,6 +124,7 @@ public class ChatsListActivity extends AppCompatActivity implements LongpollList
         super.onResume();
         SharedPreferences sharedPreferences = getSharedPreferences("VKGPT", Context.MODE_PRIVATE);
         String accessToken = sharedPreferences.getString("access_token", "");
+        renderChats(accessToken, new VKUtils());
         LongpollManager.getInstance(accessToken).addListener(this);
     }
 
